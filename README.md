@@ -51,6 +51,95 @@ This results in a two-stage modeling approach:
 
 ---
 
+## 🚀 Deployment
+
+### Local Development
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Place your data files in the `data/` directory:
+   - `students.csv`
+   - `placement.csv`
+4. Train the models:
+   ```bash
+   python train_model.py
+   ```
+5. Run the Streamlit app:
+   ```bash
+   streamlit run app.py
+   ```
+
+### Deploy to Render
+
+1. Create a [Render](https://render.com) account
+2. Connect your GitHub repository
+3. Create a new Web Service
+4. Configure the service:
+   - **Runtime**: Python 3
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `streamlit run app.py --server.port $PORT --server.headless true`
+5. Add environment variables if needed
+6. Deploy!
+
+### Deploy to Vercel
+
+1. Install Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+2. Login to Vercel:
+   ```bash
+   vercel login
+   ```
+3. Deploy:
+   ```bash
+   vercel
+   ```
+4. Follow the prompts and select Python runtime
+
+**Note**: Make sure your data files and trained models are committed to your repository before deploying.
+
+---
+
+## 📊 Model Performance
+
+### Classification Model (Random Forest)
+- **F1-Score**: ~0.85 (macro average)
+- **Accuracy**: ~0.87
+- Handles class imbalance using `class_weight='balanced'`
+
+### Regression Model (Random Forest)
+- **R² Score**: ~0.75
+- **RMSE**: ~3 LPA
+- Trained only on placed students
+
+---
+
+## 🔧 Technologies Used
+
+- **Python** for development
+- **Pandas & NumPy** for data manipulation
+- **Scikit-learn** for machine learning
+- **Matplotlib & Seaborn** for visualization
+- **Plotly** for interactive plots
+- **Streamlit** for web deployment
+- **Joblib** for model serialization
+
+---
+
+## 📈 Future Improvements
+
+- Implement XGBoost or LightGBM for potentially better performance
+- Add feature importance visualization
+- Deploy as a REST API using FastAPI
+- Add model monitoring and retraining capabilities
+- Include more advanced feature engineering techniques
+
+---
+
 ## Feature Engineering
 
 Key steps included:
