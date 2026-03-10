@@ -1,252 +1,227 @@
-# Student Placement and Salary Prediction using Machine Learning
+# Student Placement & Salary Prediction
 
-## Project Overview
+A machine learning project that analyzes student academic and skill-based data to predict **placement outcomes** and **expected salary packages**.
 
-This project aims to analyze student academic and skill-related data to:
-
-1. Predict whether a student gets placed (classification task)
-2. Predict the expected salary for placed students (regression task)
-
-The project demonstrates the complete machine learning pipeline, including data preprocessing, feature engineering, model selection, hyperparameter tuning, and evaluation.
+This project demonstrates a **complete machine learning pipeline**, including data preprocessing, model training, evaluation, and deployment using an interactive web application.
 
 ---
 
-## Dataset
+# Project Overview
 
-The dataset is sourced from Kaggle and contains information related to:
+This system predicts two key outcomes for students:
 
-* Academic performance
-* Skills and practical experience
-* Demographic and background attributes
-* Placement status and salary
+**1. Placement Prediction (Classification)**
+Determines whether a student is likely to get placed based on academic performance, skills, and background.
 
-Two CSV files were provided:
+**2. Salary Prediction (Regression)**
+Estimates the expected salary (in LPA) for students predicted to be placed.
 
-* One containing student attributes
-* One containing placement status and salary details
-
-These were merged using a unique student identifier.
-
-**Dataset link:** [Indian Engineering College Placement Dataset](https://www.kaggle.com/datasets/vishardmehta/indian-engineering-college-placement-dataset)
+An interactive **Streamlit web application** allows users to enter student details and instantly view predictions.
 
 ---
 
-## Problem Formulation
+# Tech Stack
 
-### 1. Placement Prediction (Classification)
-
-* Target variable: `placement_status`
-* Objective: Predict whether a student is placed or not
-
-### 2. Salary Prediction (Regression)
-
-* Target variable: `salary_lpa`
-* Objective: Predict salary in LPA
-* Important assumption: Salary prediction is performed **only for placed students**, as salary is undefined for non-placed students
-
-This results in a two-stage modeling approach:
-
-1. Placement classification
-2. Salary regression conditional on placement
+| Category         | Tools Used          |
+| ---------------- | ------------------- |
+| Programming      | Python              |
+| Data Processing  | Pandas, NumPy       |
+| Machine Learning | Scikit-learn        |
+| Visualization    | Matplotlib, Seaborn |
+| Web Interface    | Streamlit           |
+| Model Storage    | Joblib              |
 
 ---
 
-## 🚀 Deployment
+# Machine Learning Pipeline
 
-### Local Development
+The project follows a complete ML workflow:
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Place your data files in the `data/` directory:
-   - `students.csv`
-   - `placement.csv`
-4. Train the models:
-   ```bash
-   python train_model.py
-   ```
-5. Run the Streamlit app:
-   ```bash
-   streamlit run app.py
-   ```
-
-### Deploy to Render
-
-1. Create a [Render](https://render.com) account
-2. Connect your GitHub repository
-3. Create a new Web Service
-4. Configure the service:
-   - **Runtime**: Python 3
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `streamlit run app.py --server.port $PORT --server.headless true`
-5. Add environment variables if needed
-6. Deploy!
-
-### Deploy to Vercel
-
-1. Install Vercel CLI:
-   ```bash
-   npm install -g vercel
-   ```
-2. Login to Vercel:
-   ```bash
-   vercel login
-   ```
-3. Deploy:
-   ```bash
-   vercel
-   ```
-4. Follow the prompts and select Python runtime
-
-**Note**: Make sure your data files and trained models are committed to your repository before deploying.
+1. **Data Collection**
+2. **Data Cleaning & Preprocessing**
+3. **Feature Engineering**
+4. **Model Training**
+5. **Hyperparameter Tuning**
+6. **Model Evaluation**
+7. **Deployment via Web App**
 
 ---
 
-## 📊 Model Performance
+# Models Used
 
-### Classification Model (Random Forest)
-- **F1-Score**: ~0.85 (macro average)
-- **Accuracy**: ~0.87
-- Handles class imbalance using `class_weight='balanced'`
+## Placement Prediction
 
-### Regression Model (Random Forest)
-- **R² Score**: ~0.75
-- **RMSE**: ~3 LPA
-- Trained only on placed students
+**Model:** Random Forest Classifier
 
----
+Key characteristics:
 
-## 🔧 Technologies Used
+* Handles complex feature interactions
+* Robust to overfitting
+* Uses `class_weight="balanced"` to address class imbalance
 
-- **Python** for development
-- **Pandas & NumPy** for data manipulation
-- **Scikit-learn** for machine learning
-- **Matplotlib & Seaborn** for visualization
-- **Plotly** for interactive plots
-- **Streamlit** for web deployment
-- **Joblib** for model serialization
+**Hyperparameter Tuning:**
+RandomizedSearchCV was used to optimize model performance.
 
 ---
 
-## 📈 Future Improvements
+## Salary Prediction
 
-- Implement XGBoost or LightGBM for potentially better performance
-- Add feature importance visualization
-- Deploy as a REST API using FastAPI
-- Add model monitoring and retraining capabilities
-- Include more advanced feature engineering techniques
+**Model:** Random Forest Regressor
 
-### 🚧 Updated Input Scheme
+Key characteristics:
 
-The Streamlit interface now collects raw skill and experience values separately:
+* Captures nonlinear relationships
+* Works well with tabular data
+* Trained **only on students who were placed**
 
-* **Coding, communication, and aptitude skill ratings** (0–10 sliders)
-* **Projects completed**, **internships completed**, **hackathons participated** (numeric inputs)
-* Branch values now can be custom abbreviations like `CSE`, `ECE`, `ME`, `CE`, and `IT`.
-
-These are combined under the hood into `skill_rating` and `practical_experience` using the same formulas used during training, ensuring consistency between user inputs and the model's expected features.
+**Hyperparameter Tuning:**
+RandomizedSearchCV
 
 ---
 
-## Feature Engineering
+# Model Performance
 
-Key steps included:
+## Placement Prediction
 
-* Dropping weakly correlated and redundant features
-* Combining related features into composite variables (e.g., skill ratings, practical experience)
-* Encoding categorical variables
-* Handling class imbalance using class weights
-* Separating features used for classification and regression where appropriate
+| Metric           | Score |
+| ---------------- | ----- |
+| Accuracy         | ~0.88 |
+| F1 Score (Macro) | ~0.85 |
 
-Final selected features include academic performance, CGPA, backlogs, skill ratings, practical experience, and key demographic indicators.
-
----
-
-## Models Used
-
-### Classification Model
-
-* Random Forest Classifier
-* Class imbalance handled using `class_weight='balanced'`
-* Hyperparameter tuning using `RandomizedSearchCV`
-* Evaluation metrics:
-
-  * Accuracy
-  * Precision, Recall, F1-score
-  * Confusion Matrix
-
-### Regression Model
-
-* Random Forest Regressor
-* Trained only on placed students
-* Hyperparameter tuning using `RandomizedSearchCV`
-* Evaluation metrics:
-
-  * R² score
-  * RMSE (Root Mean Squared Error)
+The balanced training improved the model's ability to correctly identify **non-placed students**.
 
 ---
 
-## Results
+## Salary Prediction
 
-### Placement Prediction
+| Metric   | Score     |
+| -------- | --------- |
+| R² Score | ~0.75     |
+| RMSE     | ~3.05 LPA |
 
-* Accuracy: ~0.88
-* Improved recall for non-placed students after class balancing
-* Strong overall F1-score despite class imbalance
-
-### Salary Prediction
-
-* R² score: ~0.75
-* RMSE: ~3.05 LPA
-* Indicates strong explanatory power with realistic prediction error
+The model explains a significant portion of salary variation while maintaining realistic error margins.
 
 ---
 
-## Key Takeaways
+# Web Application
 
-* Accuracy alone is insufficient for imbalanced classification problems
-* Proper problem framing significantly improves regression performance
-* Separating placement and salary prediction leads to more realistic models
-* Feature engineering and domain understanding have a large impact on results
+The project includes a **Streamlit-based interactive interface**.
 
----
+Users can:
 
-## Technologies Used
-
-* Python
-* Pandas, NumPy
-* Scikit-learn
-* Matplotlib, Seaborn
-* Jupyter Notebook
+* Enter student details
+* Predict placement outcome
+* Estimate expected salary
+* View feature importance affecting predictions
 
 ---
 
-## How to Run
+# Deployment
 
-1. Clone the repository
-2. Create a virtual environment
-3. Install dependencies:
+The application is deployed using **Streamlit Community Cloud**.
 
-   ```
-   pip install -r requirements.txt
-   ```
-4. Open the notebook and run cells sequentially
+### Deployment Steps
+
+1. Push the project to a GitHub repository.
+2. Go to **[https://share.streamlit.io](https://share.streamlit.io)**
+3. Connect your repository.
+4. Select `app.py` as the main file.
+5. Deploy.
+
+After deployment, the application becomes available at a public URL similar to:
+
+```
+https://your-app-name.streamlit.app
+```
+
+Every push to GitHub automatically updates the deployed app.
 
 ---
 
-## Future Improvements
+# Running the Project Locally
 
-* Try gradient boosting models for salary prediction
-* Explore interaction features
-* Add company-level or college-tier data if available
+### 1. Clone the Repository
+
+```
+git clone <your-repository-url>
+cd <repository-folder>
+```
+
+### 2. Install Dependencies
+
+```
+pip install -r requirements.txt
+```
+
+### 3. Add Dataset
+
+Place the following files inside the `data/` folder:
+
+```
+data/
+ ├── students.csv
+ └── placement.csv
+```
+
+### 4. Train the Models
+
+```
+python train_model.py
+```
+
+### 5. Run the Web Application
+
+```
+streamlit run app.py
+```
 
 ---
 
-## Author
+# Using the Application
 
-Varun Shakya \
+1. Enter student details such as:
+
+   * Academic scores
+   * Skills
+   * Experience
+   * Background information
+
+2. Click:
+
+```
+Predict Placement & Salary
+```
+
+3. The app will display:
+
+   * Placement prediction
+   * Expected salary range
+   * Important features influencing the prediction
+
+---
+
+# Project Structure
+
+```
+project/
+│
+├── data/
+│   ├── students.csv
+│   └── placement.csv
+│
+├── models/
+│   ├── placement_model.pkl
+│   └── salary_model.pkl
+│
+├── train_model.py
+├── app.py
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# Author
+
+**Varun Shakya**
 Machine Learning Student
-
