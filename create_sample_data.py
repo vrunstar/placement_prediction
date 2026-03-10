@@ -11,8 +11,8 @@ def create_sample_data():
     students_data = {
         'Student_ID': range(1, 101),
         'gender': np.random.choice(['Male', 'Female'], 100),
-        'branch': np.random.choice(['Computer Science', 'Information Technology',
-                                  'Electronics', 'Mechanical', 'Civil'], 100),
+        # use abbreviated branch codes matching user request
+        'branch': np.random.choice(['CSE', 'ECE', 'ME', 'CE', 'IT'], 100),
         'tenth_percentage': np.random.normal(85, 10, 100).clip(0, 100),
         'twelfth_percentage': np.random.normal(80, 12, 100).clip(0, 100),
         'cgpa': np.random.normal(7.5, 1.2, 100).clip(0, 10),

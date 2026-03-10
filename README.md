@@ -144,6 +144,7 @@ The Streamlit interface now collects raw skill and experience values separately:
 
 * **Coding, communication, and aptitude skill ratings** (0–10 sliders)
 * **Projects completed**, **internships completed**, **hackathons participated** (numeric inputs)
+* Branch values now can be custom abbreviations like `CSE`, `ECE`, `ME`, `CE`, and `IT`.
 
 These are combined under the hood into `skill_rating` and `practical_experience` using the same formulas used during training, ensuring consistency between user inputs and the model's expected features.
 
