@@ -33,6 +33,11 @@ def main():
     if clf_model is None:
         return
 
+    # determine available branch columns from saved features
+    branch_cols = [col for col in feature_names if col.startswith('branch_')]
+    # derive branch names for UI
+    branch_options = [col.replace('branch_', '') for col in branch_cols]
+
     # Create two columns for input
     col1, col2 = st.columns(2)
 
@@ -45,8 +50,7 @@ def main():
     with col2:
         st.subheader("Personal Information")
         gender = st.selectbox("Gender", ["Male", "Female"])
-        branch = st.selectbox("Branch", ["Computer Science", "Information Technology",
-                                       "Electronics", "Mechanical", "Civil"])
+        branch = st.selectbox("Branch", branch_options)
         city_tier = st.selectbox("City Tier", ["Tier 1", "Tier 2", "Tier 3"])
         family_income = st.selectbox("Family Income Level", ["Low", "Medium", "High"])
 
@@ -54,8 +58,14 @@ def main():
 
     with col3:
         st.subheader("Skills & Experience")
-        practical_experience = st.slider("Practical Experience (projects + internships + hackathons)", 0, 20, 5)
-        skill_rating = st.slider("Overall Skill Rating", 0.0, 10.0, 7.0)
+        coding_skill = st.slider("Coding Skill Rating", 0.0, 10.0, 5.0)
+        communication_skill = st.slider("Communication Skill Rating", 0.0, 10.0, 6.0)
+        aptitude_skill = st.slider("Aptitude Skill Rating", 0.0, 10.0, 6.0)
+
+        projects_completed = st.number_input("Projects Completed", 0, 20, 2)
+        internships_completed = st.number_input("Internships Completed", 0, 10, 1)
+        hackathons_participated = st.number_input("Hackathons Participated", 0, 10, 0)
+
         extracurricular = st.selectbox("Extracurricular Involvement", ["Low", "Medium", "High"])
 
     with col4:
@@ -66,6 +76,10 @@ def main():
     # Prediction button
     if st.button("Predict Placement & Salary", type="primary"):
         # Prepare input data
+        # compute combined features from individual inputs
+        practical_experience = projects_completed + internships_completed + hackathons_participated
+        skill_rating = (0.5 * coding_skill) + (0.2 * communication_skill) + (0.3 * aptitude_skill)
+
         input_data = {
             'twelfth_percentage': twelfth_percentage,
             'cgpa': cgpa,
@@ -80,9 +94,7 @@ def main():
             'internet_access': 1 if internet_access == "Yes" else 0
         }
 
-        # Add branch one-hot encoding
-        branch_cols = ['branch_Computer Science', 'branch_Information Technology',
-                      'branch_Electronics', 'branch_Mechanical', 'branch_Civil']
+        # Add branch one-hot encoding using the same columns used during training
         for col in branch_cols:
             input_data[col] = 1 if col == f"branch_{branch}" else 0
 
@@ -103,7 +115,8 @@ def main():
 
             # Salary prediction
             salary_pred = reg_model.predict(input_df)[0]
-            st.info(".1f"
+            # show the predicted salary
+            st.info(f"Predicted salary: {salary_pred:.1f} LPA")
             # Display salary range
             salary_range = f"₹{(salary_pred - 2):.1f} - ₹{(salary_pred + 2):.1f} LPA"
             st.metric("Expected Salary Range", salary_range)

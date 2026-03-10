@@ -13,7 +13,7 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 def load_and_preprocess_data():
     """Load and preprocess the student placement data"""
     # Load data
-    student = pd.read_csv('data/student.csv')
+    student = pd.read_csv('data/students.csv')
     placement = pd.read_csv('data/placement.csv')
 
     # Merge datasets

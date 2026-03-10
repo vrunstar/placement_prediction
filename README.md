@@ -138,6 +138,15 @@ This results in a two-stage modeling approach:
 - Add model monitoring and retraining capabilities
 - Include more advanced feature engineering techniques
 
+### 🚧 Updated Input Scheme
+
+The Streamlit interface now collects raw skill and experience values separately:
+
+* **Coding, communication, and aptitude skill ratings** (0–10 sliders)
+* **Projects completed**, **internships completed**, **hackathons participated** (numeric inputs)
+
+These are combined under the hood into `skill_rating` and `practical_experience` using the same formulas used during training, ensuring consistency between user inputs and the model's expected features.
+
 ---
 
 ## Feature Engineering
